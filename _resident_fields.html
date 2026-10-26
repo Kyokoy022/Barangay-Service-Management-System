@@ -1,0 +1,12 @@
+<label>Full name</label>
+<input name="full_name" value="{{ form.get('full_name','') }}" required>
+<label>Address</label>
+<input name="address" value="{{ form.get('address','') }}" required>
+<label>Birth date</label>
+<input type="date" name="birth_date" value="{{ form.get('birth_date','') }}">
+<label>Contact number</label>
+<input name="contact_number" value="{{ form.get('contact_number','') }}">
+<label>Civil status</label>
+<select name="civil_status">
+  {% for c in CIVIL_STATUSES %}<option value="{{ c }}" {{ 'selected' if form.get('civil_status','Single') == c }}>{{ c }}</option>{% endfor %}
+</select>

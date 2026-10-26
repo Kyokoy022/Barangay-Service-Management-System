@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+{% block content %}
+<h1>Welcome, {{ dash.resident.full_name }}</h1>
+
+<div class="card">
+  <h2>Request a document</h2>
+  <form method="post" action="{{ url_for('resident_request') }}">
+    {{ csrf_field() }}
+    <label>Document type</label>
+    <select name="document_type">{% for t in DOCUMENT_TYPES %}<option>{{ t }}</option>{% endfor %}</select>
+    <label>Purpose</label>
+    <input name="purpose" required placeholder="e.g. Employment, scholarship">
+    <p><button type="submit">Submit request</button></p>
+  </form>
+  <p class="muted">Documents are only released after approval by barangay personnel.</p>
+</div>
+
+<div class="card">
+  <h2>My requests</h2>
+  {% if not dash.requests %}<p class="muted">No requests yet.</p>{% else %}
+  <table>
+    <tr><th>Document</th><th>Purpose</th><th>Submitted</th><th>Status</th><th>Remarks</th></tr>
+    {% for r in dash.requests %}
+    <tr>
+      <td>{{ r.document_type }}</td><td>{{ r.purpose }}</td>
+      <td>{{ r.created_at.strftime('%d %b %Y %H:%M') }}</td>
+      <td><span class="badge {{ r.status }}">{{ r.status }}</span></td>
+      <td>{{ r.remarks or '' }}</td>
+    </tr>
+    {% endfor %}
+  </table>{% endif %}
+</div>
+
+<div class="card">
+  <h2>Schedule an appointment</h2>
+  <form method="post" action="{{ url_for('resident_appointment') }}">
+    {{ csrf_field() }}
+    <label>Purpose</label>
+    <input name="purpose" required placeholder="e.g. Pick up clearance, consultation">
+    <label>Date and time</label>
+    <input type="datetime-local" name="scheduled_at" required>
+    <p><button type="submit">Book appointment</button></p>
+  </form>
+</div>
+
+<div class="card">
+  <h2>My appointments</h2>
+  {% if not dash.appointments %}<p class="muted">No appointments yet.</p>{% else %}
+  <table>
+    <tr><th>When</th><th>Purpose</th><th>Status</th></tr>
+    {% for a in dash.appointments %}
+    <tr>
+      <td>{{ a.scheduled_at.strftime('%d %b %Y %H:%M') }}</td><td>{{ a.purpose }}</td>
+      <td><span class="badge {{ a.status }}">{{ a.status }}</span></td>
+    </tr>
+    {% endfor %}
+  </table>{% endif %}
+</div>
+{% endblock %}

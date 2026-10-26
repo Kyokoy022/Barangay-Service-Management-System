@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Resident{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>{{ 'Add resident' if resident_id is none else 'Edit resident' }}</h1>
+  <form method="post">
+    {{ csrf_field() }}
+    {% include "_resident_fields.html" %}
+    {% if resident_id is none %}
+      <h2 style="margin-top:20px">Login account (optional)</h2>
+      <p class="muted">Fill these in if the resident should be able to log in.</p>
+      <label>Username</label><input name="username" value="{{ form.get('username','') }}">
+      <label>Password (min. 6 characters)</label><input name="password" type="password">
+    {% endif %}
+    <p><button type="submit">Save</button> <a class="btn" href="{{ url_for('admin_residents') }}">Cancel</a></p>
+  </form>
+</div>
+{% endblock %}

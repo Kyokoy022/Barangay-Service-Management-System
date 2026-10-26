@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h1>Reports</h1>
+<div class="stats">
+  <div class="stat"><b>{{ report.residents }}</b>Residents</div>
+  <div class="stat"><b>{{ report.total_requests }}</b>Total requests</div>
+  {% for s in STATUSES %}<div class="stat"><b>{{ report.requests_by_status[s] }}</b>Requests {{ s|lower }}</div>{% endfor %}
+  <div class="stat"><b>{{ report.total_appointments }}</b>Appointments</div>
+  <div class="stat"><b>{{ report.appointments_by_status['PENDING'] }}</b>Pending appointments</div>
+</div>
+{% endblock %}
