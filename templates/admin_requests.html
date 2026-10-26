@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Requests{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Document requests</h1>
+  {% if not requests %}<p class="muted">No requests yet.</p>{% else %}
+  <table>
+    <tr><th>Resident</th><th>Document</th><th>Purpose</th><th>Submitted</th><th>Status</th><th>Update</th></tr>
+    {% for r in requests %}
+    <tr>
+      <td>{{ r.full_name }}</td><td>{{ r.document_type }}</td><td>{{ r.purpose }}</td>
+      <td>{{ r.created_at.strftime('%d %b %Y %H:%M') }}</td>
+      <td><span class="badge {{ r.status }}">{{ r.status }}</span></td>
+      <td>
+        <form class="inline" method="post" action="{{ url_for('admin_request_status', request_id=r.id) }}">
+          {{ csrf_field() }}
+          <select name="status">{% for s in STATUSES %}<option {{ 'selected' if s == r.status }}>{{ s }}</option>{% endfor %}</select>
+          <input name="remarks" placeholder="Remarks" value="{{ r.remarks or '' }}">
+          <button type="submit">Save</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>{% endif %}
+</div>
+{% endblock %}

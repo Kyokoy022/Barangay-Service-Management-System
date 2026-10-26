@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Appointments</h1>
+  {% if not appointments %}<p class="muted">No appointments yet.</p>{% else %}
+  <table>
+    <tr><th>Resident</th><th>When</th><th>Purpose</th><th>Status</th><th>Update</th></tr>
+    {% for a in appointments %}
+    <tr>
+      <td>{{ a.full_name }}</td><td>{{ a.scheduled_at.strftime('%d %b %Y %H:%M') }}</td><td>{{ a.purpose }}</td>
+      <td><span class="badge {{ a.status }}">{{ a.status }}</span></td>
+      <td>
+        <form class="inline" method="post" action="{{ url_for('admin_appointment_status', appointment_id=a.id) }}">
+          {{ csrf_field() }}
+          <select name="status">{% for s in STATUSES %}<option {{ 'selected' if s == a.status }}>{{ s }}</option>{% endfor %}</select>
+          <button type="submit">Save</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>{% endif %}
+</div>
+{% endblock %}

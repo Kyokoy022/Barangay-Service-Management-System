@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h1>Settings</h1>
+<div class="card">
+  <h2>Change password</h2>
+  <p class="muted">Signed in as <b>{{ g.user.username }}</b></p>
+  <form method="post" action="{{ url_for('settings_password') }}">
+    {{ csrf_field() }}
+    <label>Current password</label><input type="password" name="current_password" required>
+    <label>New password (min. 6 characters)</label><input type="password" name="new_password" required minlength="6">
+    <label>Confirm new password</label><input type="password" name="confirm_password" required minlength="6">
+    <p><button type="submit">Change password</button></p>
+  </form>
+</div>
+{% if form %}
+<div class="card">
+  <h2>My profile</h2>
+  <form method="post" action="{{ url_for('settings_profile') }}">
+    {{ csrf_field() }}
+    {% include "_resident_fields.html" %}
+    <p><button type="submit">Save profile</button></p>
+  </form>
+</div>
+{% endif %}
+{% endblock %}
